@@ -1,6 +1,8 @@
 <?php
     namespace Validator;
 
+use Exception;
+
     class ValidatorForm{
         //--------- Default values
         private $default = [
@@ -93,13 +95,50 @@
         //--------- Validate through options
         private function viaOptions(string $name, array $options):bool
         { 
-            return in_array($this->values[$name], $options); 
+            return in_array($this->Values[$name], $options); 
         }
         /*-----------------------------------------------------------------------------------------------------------------------------*/
 
-        //----------------------------------------
-        //---------------- PUBLIC FUNCTIONS ------
-        //----------------------------------------
+        //----------------------------------------------------------------------------------
+        //----------------------------- PUBLIC FUNCTIONS -----------------------------------
+        //----------------------------------------------------------------------------------
+         //--------- Validate an input
+         public function validate(string $name):bool
+         {
+            try{
+                // If the input is in the $avoid array, then an error is returned
+                if(in_array($name, $this->avoid)){  throw new Exception('This input is being avoided. Please, enter a valid value or remove the "'.$name.'" element of the <strong>$avoid</strong> array'); }
+                
+                $is_custom = isset($this->Validations[$name]);
+                $is_default = isset($this->default[$name]);
+    
+                // If the input validation isn't in $Validations and $default array, then that input doesn't exist 
+                if(!$is_custom && !$is_default){  throw new Exception('The input name do not exist. Please, enter a valid value'); }
+                
+                // Get input value
+                $value = $this->Values[$name];
+                // Get validation type. If this isn't especified, then the default values is used. 
+                $type = ($is_custom) ? $this->Validations[$name]['type'] : $this->Validations[$name]['type'];
+                
+                // Depending on the validation type, the input is validated
+                if($type == 'Regexp'){ 
+                    $validator = ($is_custom) ? $this->Validations[$name]['validate'] : $this->default[$name]['validate'];
+                    return $this->viaRegExp($value, $validator); 
+                }
+                if($type == 'Options'){
+                    $options = $this->Validations[$name]['validate'];
+                    return $this->viaOptions($name, $options);
+                }
+                if($type == 'Length'){ return $this->viaLength($name, $value); }
+    
+                // This error is returned if the type doesn't "Regexp","Options" or "Length"
+                throw new Exception('The validator type is invalid. The type must be <strong>"Regexp"</strong>, <strong>"Options"</strong> or <strong>"Length"</strong>');
+            }
+            catch(Exception $error){
+                echo "<span><strong>Error:</strong> ",$error->getMessage(),"</span>";
+                return false;
+            }
+         }
 
        
     }
