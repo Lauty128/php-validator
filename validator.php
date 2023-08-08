@@ -61,7 +61,8 @@
             $this->review_valitations();
         }
 
-        private function review_valitations(){
+        private function review_valitations():void
+        {
             $types = ['Regexp','Length','Options'];
             foreach($this->Validations as $key => $value){
                 if(!in_array($value['type'], $types)){
@@ -70,4 +71,29 @@
                 }
             }
         }
+
+        /*-------------------------------------------------- VALIDATIONS FUNCTIONS ----------------------------------------------------*/
+        //--------- Validate through length
+        private function viaLength(string $name, string $text):bool
+        { 
+            // If the Validations[$name]['validate']['max'] doesn't exist, it take the default value
+            $quantitymax = (isset($this->Validations[$name]['validate']["max"])) ? $this->Validations[$name]['validate']["max"] : $this->default['max'];
+            // If the Validations[$name]['validate']['min'] doesn't exist, it take the default value
+            $quantitymin = (isset($this->Validations[$name]['validate']["min"])) ? $this->Validations[$name]['validate']["min"] : $this->default['min']; 
+            
+            return (strlen($text) <= $quantitymax && strlen($text) >= $quantitymin);
+        }
+        
+        //--------- Validate through expressions regular
+        private function viaRegExp(string $value, string $validator):bool
+        { 
+            return (preg_match($validator, $value) == 1) ? true : false ; 
+        }
+        
+        //--------- Validate through options
+        private function viaOptions(string $name, array $options):bool
+        { 
+            return in_array($this->values[$name], $options); 
+        }
+        /*-----------------------------------------------------------------------------------------------------------------------------*/
     }
