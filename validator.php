@@ -34,18 +34,18 @@
 
         //--------- Inputs
         public $avoid = [];
-        private $values;
+        private $Values;
         
         //-------- Data for the validation
-        private $validationType;
+        private $Validations;
 
 
         //--------- Constructor
-        function __construct(array $values, array $validationType, array $options)
+        function __construct(array $Values, array $Validations, array $options)
         {
             //------ Values
-            $this->values = $values;
-            $this->validationType = $validationType;
+            $this->Values = $Values;
+            $this->Validations = $Validations;
 
             //------ Options
             // if the user provides a default minmium number, then this is stored for the original
@@ -56,6 +56,18 @@
             
             // The user can specify wich inputs will be avoided. If not specified, then none is avoided.
             if(isset($options['avoid'])){ $this->avoid = $options['avoid']; }
+
+            // This function is responsible of that the validation type of each element of the $Validations[$name]['type'] has as value = 'Regexp', 'Length' or 'Options'
+            $this->review_valitations();
         }
 
+        private function review_valitations(){
+            $types = ['Regexp','Length','Options'];
+            foreach($this->Validations as $key => $value){
+                if(!in_array($value['type'], $types)){
+                    //  If this value doesn't match any, it takes the value of 'Length' and its default setting
+                    $this->Validations[$key]['type'] = 'Length';
+                }
+            }
+        }
     }
