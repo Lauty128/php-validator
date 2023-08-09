@@ -172,5 +172,11 @@
             return $results;
         }
 
-
+        // Execute validation. If all the inputs are true, then this function returns true.
+        public function execute(){
+            $results = $this->get_results();
+            
+            // If at least one is false, then the result is false
+            return !in_array(false, $results);
+        }   
     }
