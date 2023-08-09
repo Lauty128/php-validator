@@ -18,7 +18,7 @@
             ],
             'name' => [
                 'type' => 'Regexp',
-                'validate' => "[a-zA-Z\s]{5,50}$"
+                'validate' => "/[a-zA-Z\s]{5,50}$/"
             ],
             'url' => [
                 'type' => 'Regexp',
@@ -104,9 +104,9 @@
         //----------------------------------------------------------------------------------
         //----------------------------- PUBLIC FUNCTIONS -----------------------------------
         //----------------------------------------------------------------------------------
-         //--------- Validate an input
-         public function validate(string $name):bool
-         {
+        //--------- Validate an input
+        public function validate(string $name):bool
+        {
             try{
                 // If the input is in the $avoid array, then an error is returned
                 if(in_array($name, $this->avoid)){  throw new Exception('This input is being avoided. Please, enter a valid value or remove the "'.$name.'" element of the <strong>$avoid</strong> array'); }
@@ -125,7 +125,7 @@
                 $value = $this->Values[$name];
 
                 // Get validation type. If this isn't especified, then the default values is used. 
-                $type = ($is_custom) ? $this->Validations[$name]['type'] : $this->Validations[$name]['type'];
+                $type = ($is_custom) ? $this->Validations[$name]['type'] : $this->default[$name]['type'];
                 
 
                 // Depending on the validation type, the input is validated
@@ -141,22 +141,22 @@
 
                 if($type == 'Length'){ return $this->viaLength($name, $value); }
     
-                // This error is returned if the type doesn't "Regexp","Options" or "Length"
+                // This error is returned if the type isn't "Regexp","Options" or "Length"
                 throw new Exception('The validator type is invalid. The type must be <strong>"Regexp"</strong>, <strong>"Options"</strong> or <strong>"Length"</strong>');
             }
             catch(Exception $error){
                 echo "<span><strong>Error:</strong> ",$error->getMessage(),"</span>";
                 return false;
             }
-         }
+        }
 
-         //--------- Get array of the results
+        //--------- Get array of the results
         public function get_results():array
         {
             // This array will be returned to the final
             $results = [];
 
-            foreach ($this->values as $name => $value) {
+            foreach ($this->Values as $name => $value) {
                 if(!in_array($name, $this->avoid)) // If the input isn't avoided
                 {
                     if(isset($this->Validations[$name]) || isset($this->default[$name])) // If the input exists in $Validations of $default
