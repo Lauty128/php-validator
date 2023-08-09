@@ -104,6 +104,13 @@
         //----------------------------------------------------------------------------------
         //----------------------------- PUBLIC FUNCTIONS -----------------------------------
         //----------------------------------------------------------------------------------
+        
+        //--------- Add a input validator through a function 
+        public function add_validation(string $name, array $validator = [ 'type' => 'Length' ])
+        {   
+            $this->Validations[$name] = $validator;
+        }
+
         //--------- Validate an input
         public function validate(string $name):bool
         {
