@@ -43,7 +43,7 @@
 
 
         //--------- Constructor
-        function __construct(array $Values, array $Validations, array $options)
+        function __construct(array $Values, array $Validations = [], array $options = [])
         {
             //------ Values
             $this->Values = $Values;
