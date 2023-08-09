@@ -1,7 +1,7 @@
 <?php
     namespace Validator;
 
-use Exception;
+    use Exception;
 
     class ValidatorForm{
         //--------- Default values
@@ -150,5 +150,27 @@ use Exception;
             }
          }
 
-       
+         //--------- Get array of the results
+        public function get_results():array
+        {
+            // This array will be returned to the final
+            $results = [];
+
+            foreach ($this->values as $name => $value) {
+                if(!in_array($name, $this->avoid)) // If the input isn't avoided
+                {
+                    if(isset($this->Validations[$name]) || isset($this->default[$name])) // If the input exists in $Validations of $default
+                    {
+                        // The default value will  be used if it isn't in $Validations
+                        // If the input is found in both, then the value of $Validations is used
+                        
+                        $results[$name] = $this->validate($name);
+                        // name with validation result added to the array
+                    }
+                 }
+            }
+            return $results;
+        }
+
+
     }
