@@ -3,7 +3,7 @@
 
     use Exception;
 
-    class ValidatorForm{
+    class FormValidator{
         //--------- Default values
         private $default = [
             //---- Minimum number acepted in Length validation
