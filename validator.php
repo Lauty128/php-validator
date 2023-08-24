@@ -7,9 +7,9 @@
         //--------- Default values
         private $default = [
             //---- Minimum number acepted in Length validation
-            'min' => 0,
+            'minLength' => 0,
             //---- Maximum number acepted in Length validation
-            'max' => 200,
+            'maxLength' => 200,
 
             //---- Default validations
             'email' => [
@@ -52,10 +52,10 @@
 
             //------ Options
             // if the user provides a default minmium number, then this is stored for the original
-            if(isset($options['default']['min'])){ $this->default['min'] = $options['default']['min']; }
+            if(isset($options['default']['minLength'])){ $this->default['minLength'] = $options['default']['minLength']; }
             
             // if the user provides a default maxmium number, then this is stored for the original
-            if(isset($options['default']['max'])){ $this->default['max'] = $options['default']['max']; }
+            if(isset($options['default']['maxLength'])){ $this->default['maxLength'] = $options['default']['maxLength']; }
             
             // The user can specify wich inputs will be avoided. If not specified, then none is avoided.
             if(isset($options['avoid'])){ $this->avoid = $options['avoid']; }
@@ -80,10 +80,10 @@
         //--------- Validate through length
         private function viaLength(string $name, string $text):bool
         { 
-            // If the Validations[$name]['validate']['max'] doesn't exist, it take the default value
-            $quantitymax = (isset($this->Validations[$name]['validate']["max"])) ? $this->Validations[$name]['validate']["max"] : $this->default['max'];
-            // If the Validations[$name]['validate']['min'] doesn't exist, it take the default value
-            $quantitymin = (isset($this->Validations[$name]['validate']["min"])) ? $this->Validations[$name]['validate']["min"] : $this->default['min']; 
+            // If the Validations[$name]['validate']['maxLength'] doesn't exist, it take the default value
+            $quantitymax = (isset($this->Validations[$name]['validate']["max"])) ? $this->Validations[$name]['validate']["max"] : $this->default['maxLength'];
+            // If the Validations[$name]['validate']['minLength'] doesn't exist, it take the default value
+            $quantitymin = (isset($this->Validations[$name]['validate']["min"])) ? $this->Validations[$name]['validate']["min"] : $this->default['minLength']; 
             
             return (strlen($text) <= $quantitymax && strlen($text) >= $quantitymin);
         }
