@@ -35,12 +35,10 @@
         ];
 
         //--------- Inputs
-        public $avoid = [];
         private $Values;
         
         //-------- Data for the validation
         private $Validations;
-
 
         //--------- Constructor
         function __construct(array $Values, array $Validations = [], array $options = [])
@@ -56,9 +54,6 @@
             
             // if the user provides a default maxmium number, then this is stored for the original
             if(isset($options['default']['maxLength'])){ $this->default['maxLength'] = $options['default']['maxLength']; }
-            
-            // The user can specify wich inputs will be avoided. If not specified, then none is avoided.
-            if(isset($options['avoid'])){ $this->avoid = $options['avoid']; }
 
             // This function is responsible of that the validation type of each element of the $Validations[$name]['type'] has as value = 'Regexp', 'Length' or 'Options'
             $this->review_valitations();
@@ -78,6 +73,9 @@
 
         /*-------------------------------------------------- VALIDATIONS FUNCTIONS ----------------------------------------------------*/
         //--------- Validate through length
+        /**
+         * Validate a field with through its length  
+        */
         private function viaLength(string $name, string $text):bool
         { 
             // If the Validations[$name]['validate']['maxLength'] doesn't exist, it take the default value
@@ -88,7 +86,7 @@
             return (strlen($text) <= $quantitymax && strlen($text) >= $quantitymin);
         }
         
-        //--------- Validate through expressions regular
+        //--------- Validate through regular expressions
         private function viaRegExp(string $value, string $validator):bool
         { 
             return (preg_match($validator, $value) == 1) ? true : false ; 
@@ -105,13 +103,19 @@
         //----------------------------- PUBLIC FUNCTIONS -----------------------------------
         //----------------------------------------------------------------------------------
         
-        //--------- Add a input validator through a function 
+        //---------> Add a input validator through a function 
+        /**
+         * It allows add a validation that wasn't added in the constructor parameters
+        */
         public function add_validation(string $name, array $validator = [ 'type' => 'Length' ])
         {   
             $this->Validations[$name] = $validator;
         }
 
-        //--------- Validate an input
+        //---------> Validate an input
+        /**
+         * It validates a field, using the configuration asigned in the constructor parameters or the add_validation() function
+        */
         public function validate(string $name):bool
         {
             try{
@@ -157,14 +161,16 @@
             }
         }
 
-        //--------- Get array of the results
+        //---------> Get array of the results
+        /**
+         * Get array of booleans that represents the validation result of each field
+        */
         public function get_results():array
         {
             // This array will be returned to the final
             $results = [];
 
             foreach ($this->Values as $name => $value) {
-                if(!in_array($name, $this->avoid)) // If the input isn't avoided
                 {
                     if(isset($this->Validations[$name]) || isset($this->default[$name])) // If the input exists in $Validations of $default
                     {
@@ -179,8 +185,14 @@
             return $results;
         }
 
-        // Execute validation. If all the inputs are true, then this function returns true.
-        public function execute(){
+        //---------> Execute validation of form.
+        /**
+         * it verifies that the array obtained in get_results() contains all the elements true
+         *
+         * If all the inputs are true, then this function returns true.
+        */
+        public function execute():bool
+        {
             $results = $this->get_results();
             
             // If at least one is false, then the result is false
