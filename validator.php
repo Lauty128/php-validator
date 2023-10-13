@@ -35,10 +35,12 @@
         ];
 
         //--------- Inputs
+        public $avoid = [];
         private $Values;
         
         //-------- Data for the validation
         private $Validations;
+
 
         //--------- Constructor
         function __construct(array $Values, array $Validations = [], array $options = [])
@@ -54,6 +56,9 @@
             
             // if the user provides a default maxmium number, then this is stored for the original
             if(isset($options['default']['maxLength'])){ $this->default['maxLength'] = $options['default']['maxLength']; }
+            
+            // The user can specify wich inputs will be avoided. If not specified, then none is avoided.
+            if(isset($options['avoid'])){ $this->avoid = $options['avoid']; }
 
             // This function is responsible of that the validation type of each element of the $Validations[$name]['type'] has as value = 'Regexp', 'Length' or 'Options'
             $this->review_valitations();
@@ -171,6 +176,7 @@
             $results = [];
 
             foreach ($this->Values as $name => $value) {
+                if(!in_array($name, $this->avoid)) // If the input isn't avoided
                 {
                     if(isset($this->Validations[$name]) || isset($this->default[$name])) // If the input exists in $Validations of $default
                     {
