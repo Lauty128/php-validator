@@ -6,13 +6,25 @@ It can be configured to your liking so as not to depend on a single validation m
 
 It is based on a class, where all the properties and methods are located. It has a basic system that consists in storage the input values on the side and the ways to validate them on the other side.
 
-## Basic setup
+## Indice
+* [Basic setup](#b-setup)
+* [Validations](#validations)
+    * [type](#type)
+    * [validate](#validate)
+    * [Other way for adding validations](#other-way-for-adding-validations-alternative-option)
+* [Options](#options)
+
+## Basic setup {b-setup}
 
 PHP validator acepts three parameters.
 
 * `$Values` : Inputs that will be validated. it Is recomended to pass the `$_POST` variable.
 * `$Validations` : Here it is specify the validation type and its validator. If this isn’t especified, then it take the default value (if the input name matches any item of the default list).
 * `$Options`:  At the moment there are few options, but they can be important.
+
+```php
+new FormValidator(array $Values, array $Validations, array $Options);
+```
 
 For using PHP validator you must download the `validator.php` file. Then to import the file with these code lines.
 
@@ -24,7 +36,7 @@ For using PHP validator you must download the `validator.php` file. Then to impo
     // If the file is in a folder, then you must type require './folder/validator.php'
 ```
 
-Here is an example.
+Here an example.
 
 ```php
 <?php
@@ -158,3 +170,45 @@ $validator->add_validation(
 );
 ``` 
 > If the validator already exists, then this will take its place
+
+## Options
+This parameter is an `Array` wich can recive 3 elements:
+
+> If some of these elements aren't specified, then the default value is used. View more in [Default values](#default-values)
+
+### minLength & maxLength
+These allow to specify the minimum and maximum number of characters that an input can have for default.
+```php
+[
+    'minLength' => 0 
+    'maxLength' => 200
+]
+```
+> If an input doesn't has a defined validation, then this will has a characters minimum of 0 and a characters maximum of 200
+
+## Default values
+There are 5(five) default validation values. These default validation allows avoid the step of add the field and its validation type in the constructor parameters or in the add_validation method.
+
+You can add more default validation values, modify or remove them. The list is the following:
+```
+=> email
+    * type = 'Regexp',
+    * validate = "/^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/"
+            
+=> name
+    * type = 'Regexp',
+    * validate = "/[a-zA-Z\s]{5,50}$/"
+            
+=> url
+    * type = 'Regexp',
+    * validate = "/^(http|https):\/\/[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}(/?)([a-zA-Z0-9\-\._\?\,\'\/\\\+&%\$#\=~])*/"
+            
+=> linkedin
+    * type = 'Regexp',
+    * validate = "^(https?://)?(www\.)?linkedin\.com/in/[\w-]+/?$"
+            
+* password
+    * type = 'Regexp',
+    * validate = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,30}$"
+```
+> email, name, url, linkedin and password represents the name attribute of the input tag. 
