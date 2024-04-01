@@ -7,14 +7,14 @@ It can be configured to your liking so as not to depend on a single validation m
 It is based on a class, where all the properties and methods are located. It has a basic system that consists in storage the input values on the side and the ways to validate them on the other side.
 
 ## Indice
-* [Basic setup](#b-setup)
+* [Basic setup](#basic-setup)
 * [Validations](#validations)
     * [type](#type)
     * [validate](#validate)
-    * [Other way for adding validations](#other-way-for-adding-validations-alternative-option)
+    * [Other way for adding validations](#other-way-for-adding-validations)
 * [Options](#options)
 
-## Basic setup {b-setup}
+## Basic setup
 
 PHP validator acepts three parameters.
 
