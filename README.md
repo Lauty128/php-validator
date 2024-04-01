@@ -77,7 +77,7 @@ Assuming the HTML code is in the same place as the PHP code and the file name is
 ```html
 <form class="ContactSection__form" method="post" action="test.php">
     <input type="text" id="name-input" name="name" placeholder="Nombre completo">
-    <input type="text" id="name-input" name="name" placeholder="Nombre completo"> 
+    <input type="text" id="subject-input" name="subject" placeholder="Nombre completo"> 
     <textarea name="message" id="message-input" rows="10" placeholder="Mensaje"></textarea>
     <input type="submit" value="ENVIAR">
 </form>
