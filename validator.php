@@ -107,7 +107,7 @@
         //----------------------------------------------------------------------------------
         //----------------------------- PUBLIC FUNCTIONS -----------------------------------
         //----------------------------------------------------------------------------------
-        
+
         //---------> Add a input validator through a function 
         /**
          * It allows add a validation that wasn't added in the constructor parameters
@@ -115,6 +115,30 @@
         public function add_validation(string $name, array $validator = [ 'type' => 'Length' ])
         {   
             $this->Validations[$name] = $validator;
+        }
+
+        /**
+         * Get validation message about the input
+        */
+        public function get_error_message(string $name)
+        {
+            $message = '';
+            $validation = isset($this->Validations[$name]) ? $this->Validations[$name] : $this->default[$name];
+
+            if (isset($validation['message'])) {
+                $message = $validation['message'];
+            } else if ($validation['type'] == 'Length') {
+                $max = (isset($validation['validate']['max'])) ? $validation['validate']['max'] : $this->default['maxLength'];
+                $min = (isset($validation['validate']['min'])) ? $validation['validate']['min'] : $this->default['minLength'];
+
+                $message = 'Must contain between ' . $min . ' and ' . $max . ' characters';
+            } else if ($validation['type'] == 'Options') {
+                $message = 'Selected option is incorrect';
+            } else {
+                $message = 'Field input is invalid';
+            }
+
+            return $message;
         }
 
         //---------> Validate an input
