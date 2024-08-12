@@ -118,6 +118,18 @@
         }
 
         /**
+         * Change the validation message of a input (This doesn't apply to default inputs)
+         *
+         * @param String $name Field name
+         * @param String $message New validation message 
+         * @return Void
+         **/
+        public function change_error_message(string $name, $message)
+        {
+            $this->Validations[$name]['message'] = $message;
+        }
+
+        /**
          * Get validation message about the input
         */
         public function get_error_message(string $name)
